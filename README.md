@@ -51,8 +51,6 @@ The complete end-to-end workflow—spanning custom market scoring transformers, 
  
 <img src="Mobile Price Predictor/Pictures/streamlit_web_app.png" alt="Streamlit Web App" width="750"/>
 
-Live Link - https://mobile-price-predictor-bnwuljvyrdkzct4begr7mk.streamlit.app/
-
 An intuitive web interface was developed in app.py using Streamlit to serve the serialized model for real-time user interaction. The application accepts user-selected hardware specifications, outputs the estimated price alongside a 95% confidence interval derived from test MAE, and dynamically assigns market tier badges (Budget, Mid-Range, or Flagship). 
 
 <br>
