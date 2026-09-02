@@ -112,8 +112,7 @@ if st.button("Predict Price", type="primary", use_container_width=True):
         "Battery Capacity (mAh)": battery,
         "Number of Rear Cameras": cameras
     }])
-    
-base_dir = os.path.dirname(os.path.abspath(__file__))
+    base_dir = os.path.dirname(os.path.abspath(__file__))
     model_file = os.path.join(base_dir, "mobile_price_pipeline.pkl")
 
     if os.path.exists(model_file):
