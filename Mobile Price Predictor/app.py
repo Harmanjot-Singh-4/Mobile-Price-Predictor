@@ -118,24 +118,15 @@ if st.button("Predict Price", type="primary", use_container_width=True):
     model_file = None
 
     # Check root working directory and script directory
+    # Fast, direct path lookup (no deep directory scanning)
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    search_roots = [os.getcwd(), script_dir, os.path.dirname(script_dir)]
-
-    for base in search_roots:
-        for root, _, files in os.walk(base):
-            if target_name in files:
-                model_file = os.path.join(root, target_name)
-                break
-        if model_file:
-            break
-
-    if model_file and os.path.exists(model_file):
-        loaded_model = joblib.load(model_file)
-        prediction = loaded_model.predict(raw_df)
-        predicted_price = float(prediction[0])
-    else:
-        st.error(f"Searched paths: {search_roots}. Model file '{target_name}' not found.")
-        predicted_price = 450.0
+    candidates = [
+        os.path.join(script_dir, "mobile_price_pipeline.pkl"),
+        "mobile_price_pipeline.pkl",
+        "Mobile Price Predictor/mobile_price_pipeline.pkl",
+        os.path.join(script_dir, "..", "mobile_price_pipeline.pkl"),
+    ]
+    model_file = next((p for p in candidates if os.path.exists(p)), None)
     
     # 95% Confidence Interval based on test MAE (~$59.39)
     margin = 1.96 * 59.39
