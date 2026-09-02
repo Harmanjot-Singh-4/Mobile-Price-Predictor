@@ -25,7 +25,7 @@ Three custom Scikit-Learn transformers were developed to incorporate commercial 
 4. Final Model Performance & Metrics:
 -----------------------------------------------------------------------
 
-![Final Model Scores](Mobile%20Price%20Predictor/Pictures/final_model_scores.png)
+<img src="Mobile Price Predictor/Pictures/final_model_scores.png" alt="Final Model Scores" width="750"/>
 
 The final model wrapped an $L_2$-regularized Ridge regressor inside TransformedTargetRegressor using log-scale functions (log1p and expm1) to handle right-skewed pricing. Evaluated on the unseen test set, it delivered an $R^2$ score of 92.23%, an RMSE of $93.63, and a Mean Absolute Error of $59.39. Additionally, 51.7% of all test predictions landed within a strict $\pm 15\%$ retail margin of actual market values.
 
@@ -34,7 +34,7 @@ The final model wrapped an $L_2$-regularized Ridge regressor inside TransformedT
 5. Gradient Descent from Scratch:
 ---------------------------------------------------------------------
 
-![Batch Gradient Descent](Mobile%20Price%20Predictor/Pictures/batch_gradient_descent.png)
+<img src="Mobile Price Predictor/Pictures/batch_gradient_descent.png" alt="Batch Gradient Descent" width="750"/>
 
 To mathematically validate Scikit-Learn's optimization, a custom Batch Gradient Descent algorithm was built from scratch using pure NumPy matrix vectorization. Running for 2,000 iterations, the manual implementation converged to a 92.31% $R^2$ score and $93.14 RMSE, confirming theoretical alignment. The Scikit-Learn Ridge pipeline was retained for production to leverage $L_2$ shrinkage against multicollinearity. 
 
@@ -49,7 +49,7 @@ The complete end-to-end workflow—spanning custom market scoring transformers, 
 8. Interactive Web App (Streamlit):
  ----------------------------------------------------  
  
-![Streamlit Web App](Mobile%20Price%20Predictor/Pictures/streamlit_web_app.png)
+<img src="Mobile Price Predictor/Pictures/streamlit_web_app.png" alt="Streamlit Web App" width="750"/>
 
 An intuitive web interface was developed in app.py using Streamlit to serve the serialized model for real-time user interaction. The application accepts user-selected hardware specifications, outputs the estimated price alongside a 95% confidence interval derived from test MAE, and dynamically assigns market tier badges (Budget, Mid-Range, or Flagship). 
 
