@@ -8,68 +8,55 @@ from sklearn.base import BaseEstimator, TransformerMixin
 # ---------------------------------------------------------
 # 1. Custom Transformers (Required for joblib to deserialize)
 # ---------------------------------------------------------
+from sklearn.base import BaseEstimator, TransformerMixin
+
+# 1. Custom Transformer: Brand Value
 class BrandValueAdder(BaseEstimator, TransformerMixin):
     def __init__(self):
-        self.brand_value_map = {
-            'Apple': 9.8, 'Samsung': 9.0, 'Google': 8.5, 'OnePlus': 8.0,
-            'Sony': 7.5, 'Asus': 7.2, 'Xiaomi': 7.0, 'Huawei': 6.8,
-            'Oppo': 6.5, 'Vivo': 6.5, 'Motorola': 6.2, 'Realme': 6.0,
-            'Nokia': 5.5, 'Blackberry': 5.0, 'LG': 5.0
+        self.brand_scores = {
+            'Apple': 9.8, 'Samsung': 9.0, 'Google': 8.5, 
+            'OnePlus': 8.0, 'Xiaomi': 7.2, 'Oppo': 6.8, 
+            'Vivo': 6.8, 'Realme': 6.5, 'Motorola': 6.0
         }
-        self.default_score = 5.0
-
     def fit(self, X, y=None):
         return self
-
     def transform(self, X):
-        X_out = X.copy()
-        X_out['Brand Value Score'] = (
-            X_out['Brand'].astype(str).str.strip()
-            .map(self.brand_value_map)
-            .fillna(self.default_score)
-        )
-        return X_out
+        X_copy = X.copy()
+        X_copy['Brand_Value'] = X_copy['Brand'].map(self.brand_scores).fillna(5.0)
+        return X_copy
 
+# 2. Custom Transformer: Service Score
 class ServiceScoreAdder(BaseEstimator, TransformerMixin):
     def __init__(self):
-        self.service_score_map = {
-            'Apple': 9.5, 'Samsung': 9.0, 'Xiaomi': 8.2, 'Oppo': 7.8,
-            'Vivo': 7.8, 'OnePlus': 7.5, 'Realme': 7.5, 'Google': 7.0,
-            'Motorola': 7.0, 'Asus': 6.8, 'Nokia': 6.5, 'Sony': 6.2,
-            'Huawei': 6.0, 'LG': 5.0, 'Blackberry': 4.0
+        self.service_scores = {
+            'Apple': 9.5, 'Samsung': 9.0, 'OnePlus': 8.0, 
+            'Xiaomi': 8.2, 'Oppo': 7.5, 'Vivo': 7.5, 
+            'Google': 7.0, 'Realme': 7.0, 'Motorola': 6.5
         }
-        self.default_score = 5.0
-
     def fit(self, X, y=None):
         return self
-
     def transform(self, X):
-        X_out = X.copy()
-        X_out['Service Score'] = (
-            X_out['Brand'].astype(str).str.strip()
-            .map(self.service_score_map)
-            .fillna(self.default_score)
-        )
-        return X_out
+        X_copy = X.copy()
+        X_copy['Service_Score'] = X_copy['Brand'].map(self.service_scores).fillna(4.0)
+        return X_copy
 
+# 3. Custom Transformer: Spec Tier
 class SpecTierClassifier(BaseEstimator, TransformerMixin):
     def fit(self, X, y=None):
         return self
-
     def transform(self, X):
-        X_out = X.copy()
-        def assign_tier(row):
-            ram = row.get('RAM (GB)', 4)
-            storage = row.get('Storage (GB)', 64)
+        X_copy = X.copy()
+        def classify_tier(row):
+            ram = row['RAM (GB)']
+            storage = row['Storage (GB)']
             if ram >= 8 and storage >= 256:
                 return 'Flagship'
-            elif ram <= 4 and storage <= 64:
-                return 'Budget'
-            else:
+            elif ram >= 6 or storage >= 128:
                 return 'Mid-Range'
-                
-        X_out['Spec Tier'] = X_out.apply(assign_tier, axis=1)
-        return X_out
+            else:
+                return 'Budget'
+        X_copy['Spec_Tier'] = X_copy.apply(classify_tier, axis=1)
+        return X_copy
 
 # ---------------------------------------------------------
 # 2. Page Configuration & UI Layout
