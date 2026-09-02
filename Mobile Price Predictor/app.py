@@ -8,9 +8,11 @@ from sklearn.base import BaseEstimator, TransformerMixin
 # ---------------------------------------------------------
 # 1. Custom Transformers (Required for joblib to deserialize)
 # ---------------------------------------------------------
-from sklearn.base import BaseEstimator, TransformerMixin
+import sys
+import __main__
 
-# 1. Custom Transformer: Brand Value
+
+# 1. Class Definitions
 class BrandValueAdder(BaseEstimator, TransformerMixin):
     def __init__(self):
         self.brand_scores = {
@@ -25,7 +27,6 @@ class BrandValueAdder(BaseEstimator, TransformerMixin):
         X_copy['Brand_Value'] = X_copy['Brand'].map(self.brand_scores).fillna(5.0)
         return X_copy
 
-# 2. Custom Transformer: Service Score
 class ServiceScoreAdder(BaseEstimator, TransformerMixin):
     def __init__(self):
         self.service_scores = {
@@ -40,7 +41,6 @@ class ServiceScoreAdder(BaseEstimator, TransformerMixin):
         X_copy['Service_Score'] = X_copy['Brand'].map(self.service_scores).fillna(4.0)
         return X_copy
 
-# 3. Custom Transformer: Spec Tier
 class SpecTierClassifier(BaseEstimator, TransformerMixin):
     def fit(self, X, y=None):
         return self
@@ -57,6 +57,11 @@ class SpecTierClassifier(BaseEstimator, TransformerMixin):
                 return 'Budget'
         X_copy['Spec_Tier'] = X_copy.apply(classify_tier, axis=1)
         return X_copy
+
+# 2. Bind directly to __main__ so pickle finds them during joblib.load()
+setattr(__main__, "BrandValueAdder", BrandValueAdder)
+setattr(__main__, "ServiceScoreAdder", ServiceScoreAdder)
+setattr(__main__, "SpecTierClassifier", SpecTierClassifier)
 
 # ---------------------------------------------------------
 # 2. Page Configuration & UI Layout
