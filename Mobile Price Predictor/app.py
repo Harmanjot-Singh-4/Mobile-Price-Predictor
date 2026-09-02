@@ -113,17 +113,29 @@ if st.button("Predict Price", type="primary", use_container_width=True):
         "Number of Rear Cameras": cameras
     }])
     
-    model_file = "mobile_price_pipeline.pkl"
-    
-    if os.path.exists(model_file):
+    # Locate mobile_price_pipeline.pkl anywhere in the repository structure
+    target_name = "mobile_price_pipeline.pkl"
+    model_file = None
+
+    # Check root working directory and script directory
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    search_roots = [os.getcwd(), script_dir, os.path.dirname(script_dir)]
+
+    for base in search_roots:
+        for root, _, files in os.walk(base):
+            if target_name in files:
+                model_file = os.path.join(root, target_name)
+                break
+        if model_file:
+            break
+
+    if model_file and os.path.exists(model_file):
         loaded_model = joblib.load(model_file)
         prediction = loaded_model.predict(raw_df)
         predicted_price = float(prediction[0])
     else:
-        st.error("Model file 'mobile_price_pipeline.pkl' not found. Train and save the model first.")
+        st.error(f"Searched paths: {search_roots}. Model file '{target_name}' not found.")
         predicted_price = 450.0
-
-    predicted_price = max(60.0, predicted_price)
     
     # 95% Confidence Interval based on test MAE (~$59.39)
     margin = 1.96 * 59.39
