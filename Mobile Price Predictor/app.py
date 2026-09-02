@@ -76,8 +76,8 @@ class SpecTierClassifier(BaseEstimator, TransformerMixin):
 # ---------------------------------------------------------
 st.set_page_config(page_title="Mobile Price Predictor", page_icon="📱", layout="centered")
 
-st.title("📱 Real-World Mobile Price Predictor")
-st.write("Predict smartphone market prices using brand tiering and machine learning regression.")
+st.title("📱 Mobile Price Predictor")
+st.write("Predict smartphone market prices using machine learning regression and custom brand-tier feature engineering.")
 st.divider()
 
 col1, col2 = st.columns(2)
