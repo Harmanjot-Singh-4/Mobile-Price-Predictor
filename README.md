@@ -27,7 +27,7 @@ Three custom Scikit-Learn transformers were developed to incorporate commercial 
 
 <img src="Mobile Price Predictor/Pictures/final_model_scores.png" alt="Final Model Scores" width="750"/>
 
-The final model wrapped an $L_2$-regularized Ridge regressor inside TransformedTargetRegressor using log-scale functions (log1p and expm1) to handle right-skewed pricing. Evaluated on the unseen test set, it delivered an $R^2$ score of 92.23%, an RMSE of $93.63, and a Mean Absolute Error of $59.39. Additionally, 51.7% of all test predictions landed within a strict $\pm 15\%$ retail margin of actual market values.
+The final model wrapped an $L_2$-regularized Ridge regressor inside TransformedTargetRegressor using log-scale functions (log1p and expm1) to handle right-skewed pricing. Evaluated on the unseen test set, it delivered an $R^2$ score of 92.23%, an RMSE of $93.63, and a Mean Absolute Error of $59.39.
 
 <br>
 
@@ -36,7 +36,7 @@ The final model wrapped an $L_2$-regularized Ridge regressor inside TransformedT
 
 <img src="Mobile Price Predictor/Pictures/batch_gradient_descent.png" alt="Batch Gradient Descent" width="750"/>
 
-To mathematically validate Scikit-Learn's optimization, a custom Batch Gradient Descent algorithm was built from scratch using pure NumPy matrix vectorization. Running for 2,000 iterations, the manual implementation converged to a 92.31% $R^2$ score and $93.14 RMSE, confirming theoretical alignment. The Scikit-Learn Ridge pipeline was retained for production to leverage $L_2$ shrinkage against multicollinearity. 
+To mathematically validate Scikit-Learn's optimization, a custom Batch Gradient Descent algorithm was built from scratch using pure NumPy matrix vectorization. Running for 2,000 iterations, the manual implementation converged to a 92.31% $R^2$ score and $93.14 RMSE, confirming theoretical alignment.
 
 <br>
 
