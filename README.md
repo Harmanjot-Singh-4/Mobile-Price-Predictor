@@ -25,7 +25,7 @@ Three custom Scikit-Learn transformers were developed to incorporate commercial 
 4. Final Model Performance & Metrics:
 -----------------------------------------------------------------------
 
-<img src="Mobile Price Predictor/Pictures/final_model_scores.png" alt="Final Model Scores" width="750"/>
+<img src="Mobile Price Predictor/Pictures/final_model_scores.png" alt="Final Model Scores" width="500"/>
 
 The final model wrapped an $L_2$-regularized Ridge regressor inside TransformedTargetRegressor using log-scale functions (log1p and expm1) to handle right-skewed pricing. Evaluated on the unseen test set, it delivered an $R^2$ score of 92.23%, an RMSE of $93.63, and a Mean Absolute Error of $59.39.
 
@@ -34,7 +34,7 @@ The final model wrapped an $L_2$-regularized Ridge regressor inside TransformedT
 5. Gradient Descent from Scratch:
 ---------------------------------------------------------------------
 
-<img src="Mobile Price Predictor/Pictures/batch_gradient_descent.png" alt="Batch Gradient Descent" width="750"/>
+<img src="Mobile Price Predictor/Pictures/batch_gradient_descent.png" alt="Batch Gradient Descent" width="500"/>
 
 To mathematically validate Scikit-Learn's optimization, a custom Batch Gradient Descent algorithm was built from scratch using pure NumPy matrix vectorization. Running for 2,000 iterations, the manual implementation converged to a 92.31% $R^2$ score and $93.14 RMSE, confirming theoretical alignment.
 
