@@ -113,10 +113,12 @@ if st.button("Predict Price", type="primary", use_container_width=True):
         "Number of Rear Cameras": cameras
     }])
     
-    model_file = "mobile_price_pipeline.pkl"
-    
-    if os.path.exists(model_file):
-        loaded_model = joblib.load(model_file)
+base_dir = os.path.dirname(os.path.abspath(__file__))
+model_file = os.path.join(base_dir, "mobile_price_pipeline.pkl")
+
+if os.path.exists(model_file):
+    loaded_model = joblib.load(model_file)
+        
         prediction = loaded_model.predict(raw_df)
         predicted_price = float(prediction[0])
     else:
