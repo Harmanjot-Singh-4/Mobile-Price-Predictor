@@ -6,6 +6,11 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 from sklearn.base import BaseEstimator, TransformerMixin
+import sklearn.compose._column_transformer as ct
+if not hasattr(ct, '_RemainderColsList'):
+    class _RemainderColsList(list):
+        pass
+    ct._RemainderColsList = _RemainderColsList
 
 # ==========================================
 # 1. Custom Feature Engineering Transformers
