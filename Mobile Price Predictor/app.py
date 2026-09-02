@@ -114,18 +114,15 @@ if st.button("Predict Price", type="primary", use_container_width=True):
     }])
     
 base_dir = os.path.dirname(os.path.abspath(__file__))
-model_file = os.path.join(base_dir, "mobile_price_pipeline.pkl")
+    model_file = os.path.join(base_dir, "mobile_price_pipeline.pkl")
 
-if os.path.exists(model_file):
-    loaded_model = joblib.load(model_file)
-        
+    if os.path.exists(model_file):
+        loaded_model = joblib.load(model_file)
         prediction = loaded_model.predict(raw_df)
         predicted_price = float(prediction[0])
     else:
-        st.error("Model file 'mobile_price_pipeline.pkl' not found. Train and save the model first.")
+        st.error("Model file 'mobile_price_pipeline.pkl' not found.")
         predicted_price = 450.0
-
-    predicted_price = max(60.0, predicted_price)
     
     # 95% Confidence Interval based on test MAE (~$59.39)
     margin = 1.96 * 59.39
