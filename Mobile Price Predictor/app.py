@@ -103,47 +103,52 @@ st.divider()
 # ---------------------------------------------------------
 # 3. Model Inference (Direct Disk Loading)
 # ---------------------------------------------------------
+# ---------------------------------------------------------
+# 3. Model Inference Execution
+# ---------------------------------------------------------
 if st.button("Predict Price", type="primary", use_container_width=True):
     raw_df = pd.DataFrame([{
         "Brand": brand,
-        "Storage (GB)": storage,
         "RAM (GB)": ram,
+        "Storage (GB)": storage,
         "Screen Size (inches)": screen_size,
         "Battery Capacity (mAh)": battery,
         "Number of Rear Cameras": cameras
     }])
-    
-    # Locate mobile_price_pipeline.pkl anywhere in the repository structure
-    target_name = "mobile_price_pipeline.pkl"
-    model_file = None
 
-    # Check root working directory and script directory
-    # Fast, direct path lookup (no deep directory scanning)
     script_dir = os.path.dirname(os.path.abspath(__file__))
     candidates = [
         os.path.join(script_dir, "mobile_price_pipeline.pkl"),
         "mobile_price_pipeline.pkl",
         "Mobile Price Predictor/mobile_price_pipeline.pkl",
-        os.path.join(script_dir, "..", "mobile_price_pipeline.pkl"),
+        os.path.join(script_dir, "..", "mobile_price_pipeline.pkl")
     ]
     model_file = next((p for p in candidates if os.path.exists(p)), None)
-    
-    # 95% Confidence Interval based on test MAE (~$59.39)
-    margin = 1.96 * 59.39
-    min_price = max(50.0, predicted_price - margin)
-    max_price = predicted_price + margin
-    
-    if predicted_price < 250:
-        category = "Budget / Entry-Level 🟢"
-    elif predicted_price < 650:
-        category = "Mid-Range Value 🟡"
-    else:
-        category = "Premium / Flagship 🔴"
 
-    st.subheader("Price Estimate")
-    st.metric(label="Estimated Market Price", value=f"${predicted_price:,.2f}")
-    
-    st.info(
-        f"**Category:** {category}\n\n"
-        f"**Expected Range (95% Confidence):** ${min_price:,.2f} – ${max_price:,.2f}"
-    )
+    if model_file and os.path.exists(model_file):
+        try:
+            loaded_model = joblib.load(model_file)
+            prediction = loaded_model.predict(raw_df)
+            predicted_price = float(prediction[0])
+
+            st.subheader("Price Estimate")
+            st.metric(label="Estimated Market Price", value=f"${predicted_price:,.2f}")
+
+            # 95% Confidence Interval based on test set MAE (~$59.39)
+            margin = 1.96 * 59.39
+            min_price = max(50.0, predicted_price - margin)
+            max_price = predicted_price + margin
+
+            if predicted_price >= 700:
+                tier_badge = "Premium / Flagship 🔴"
+            elif predicted_price >= 300:
+                tier_badge = "Mid-Range Value 🟡"
+            else:
+                tier_badge = "Budget / Entry-Level 🟢"
+
+            st.info(f"**Category:** {tier_badge}\n\n**Expected Range (95% Confidence):** ${min_price:,.2f} – ${max_price:,.2f}")
+
+        except Exception as e:
+            st.error(f"Error calculating price: {e}")
+    else:
+        st.error("Model file 'mobile_price_pipeline.pkl' not found.")
